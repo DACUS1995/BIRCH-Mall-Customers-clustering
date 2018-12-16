@@ -45,29 +45,31 @@ def compute_clusters(data: List) -> np.ndarray:
 	return predictions
 
 
-def show_results(data: np.ndarray, labels: np.ndarray) -> None:
+def show_results(data: np.ndarray, labels: np.ndarray, plot_handler = "seaborn") -> None:
 	labels = np.reshape(labels, (1, labels.size))
 	data = np.concatenate((data, labels.T), axis=1)
 	
 	# Seaborn plot
-	facet = sns.lmplot(
-		data=pd.DataFrame(data, columns=["Income", "Spending", "Label"]), 
-		x="Income", 
-		y="Spending", 
-		hue='Label', 
-		fit_reg=False, 
-		legend=True, 
-		legend_out=True
-	)
+	if plot_handler == "seaborn":
+		facet = sns.lmplot(
+			data=pd.DataFrame(data, columns=["Income", "Spending", "Label"]), 
+			x="Income", 
+			y="Spending", 
+			hue='Label', 
+			fit_reg=False, 
+			legend=True, 
+			legend_out=True
+		)
 
 	# Pure matplotlib plot
-	# fig = plt.figure()
-	# ax = fig.add_subplot(111)
-	# scatter = ax.scatter(data[:,0], data[:, 1], c=data[:, 2], s=50)
-	# ax.set_title("Clusters")
-	# ax.set_xlabel("Income")
-	# ax.set_ylabel("Spending")
-	# plt.colorbar(scatter)
+	if plot_handler == "matplotlib":
+		fig = plt.figure()
+		ax = fig.add_subplot(111)
+		scatter = ax.scatter(data[:,0], data[:, 1], c=data[:, 2], s=50)
+		ax.set_title("Clusters")
+		ax.set_xlabel("Income")
+		ax.set_ylabel("Spending")
+		plt.colorbar(scatter)
 	plt.show()
 
 
@@ -97,12 +99,13 @@ def main(args) -> None:
 
 	filtered_data = np.array(filtered_data).astype(np.float64)
 	labels = compute_clusters(filtered_data)
-	show_results(filtered_data, labels)
+	show_results(filtered_data, labels, args.plot_handler)
 
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Do some clustering")
 	parser.add_argument("--data-file", type=str, default="Mall_Customers.csv", help="dataset file name")
 	parser.add_argument("--describe", type=bool, default=False, help="describe the dataset")
+	parser.add_argument("--plot-handler", type=str, default="seaborn", help="what library to use for data visualisation")
 	args = parser.parse_args()
 	main(args)

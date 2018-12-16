@@ -6,3 +6,7 @@ Dataset URL: https://www.kaggle.com/vjchoudhary7/customer-segmentation-tutorial-
 
 ---
 There are also several visualization functions to better undersand the input data and the results.
+
+---
+**Results**:
+![alt text](https://github.com/DACUS1995/BIRCH-Mall-Customers-clustering/blob/master/results/scatter_plot.jpg "Results")
